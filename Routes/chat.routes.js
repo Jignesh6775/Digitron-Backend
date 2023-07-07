@@ -11,23 +11,29 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 //=> Route for General chat bot
-chatRoute.post("/generalChat", async(req, res)=>{
-  const message = req.body.msg
-  const response = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: `${message}.`,
-    max_tokens: 100,
-    temperature: 0,
-  })
-  res.send(response.data.choices[0].text)
+chatRoute.post("/generalChat", async (req, res) => {
+  try {
+    const message = req.body.msg
+    const response = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: `${message}.`,
+      max_tokens: 100,
+      temperature: 0,
+    })
+    res.status(200).send(response.data.choices[0].text)
+  } catch (error) {
+    res.status(401).send({ "msg": message.error })
+  }
 })
 
 //=> Route for Interview chat bot
-chatRoute.post("/interviewChat", async(req, res)=>{
-  const message = req.body.msg
+chatRoute.post("/interviewChat", async (req, res) => {
+  try {
+    const message = req.body.msg
   const response = await openai.createChatCompletion({
     model: "gpt-3.5-turbo",
-    messages: [{ role: "system", content: `Act as a senior developer, you will be taking interview of tech students.
+    messages: [{
+      role: "system", content: `Act as a senior developer, you will be taking interview of tech students.
     
     Follow this rules:
     1. Ask only conceptual questions from given tech stacks list [ React, Nodejs, Java] to the user.
@@ -39,9 +45,12 @@ chatRoute.post("/interviewChat", async(req, res)=>{
    ` },
     { role: "user", content: `${message}` }],
     max_tokens: 100,
-    temperature:0,
+    temperature: 0,
   })
-  res.send(response.data.choices[0].message.content)
+  res.status(200).send(response.data.choices[0].message.content)
+  } catch (error) {
+    res.status(401).send({ "msg": message.error })
+  }
 })
 
 
@@ -56,4 +65,4 @@ chatRoute.post("/interviewChat", async(req, res)=>{
 //   res.send(response.data.choices[0].message.content)
 // })
 
-module.exports = {chatRoute}
+module.exports = { chatRoute }

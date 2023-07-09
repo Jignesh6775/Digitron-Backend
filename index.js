@@ -4,10 +4,11 @@ const bodyParser = require("body-parser");
 const { userRoute } = require("./Routes/user.routes");
 const { connection } = require("./db");
 const { chatRoute } = require("./Routes/chat.routes");
+const cors = require("cors")
 const app = express();
 require("dotenv").config();
 app.use(express.json());
-
+app.use(cors())
 
 
 app.use("/user",userRoute)

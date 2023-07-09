@@ -22,7 +22,7 @@ chatRoute.post("/generalChat", async (req, res) => {
     })
     res.status(200).send(response.data.choices[0].text)
   } catch (error) {
-    res.status(401).send({ "msg": message.error })
+    res.status(401).send(error)
   }
 })
 
@@ -49,7 +49,7 @@ chatRoute.post("/interviewChat", async (req, res) => {
   })
   res.status(200).send(response.data.choices[0].message.content)
   } catch (error) {
-    res.status(401).send({ "msg": message.error })
+    res.status(401).send(error)
   }
 })
 
